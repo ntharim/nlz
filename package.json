@@ -1,0 +1,13 @@
+{
+  "name": "nz",
+  "description": "Normalize CLI utility",
+  "version": "0.0.0",
+  "author": {
+    "name": "Jonathan Ong",
+    "email": "me@jongleberry.com",
+    "url": "http://jongleberry.com",
+    "twitter": "https://twitter.com/jongleberry"
+  },
+  "license": "MIT",
+  "repository": "normalize/nz"
+}
