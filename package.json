@@ -1,5 +1,5 @@
 {
-  "name": "nz",
+  "name": "nlz",
   "description": "Normalize CLI utility",
   "version": "0.0.0",
   "author": {
@@ -9,5 +9,5 @@
     "twitter": "https://twitter.com/jongleberry"
   },
   "license": "MIT",
-  "repository": "normalize/nz"
+  "repository": "normalize/nlz"
 }
