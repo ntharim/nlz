@@ -9,5 +9,23 @@
     "twitter": "https://twitter.com/jongleberry"
   },
   "license": "MIT",
-  "repository": "normalize/nlz"
+  "repository": "normalize/nlz",
+  "dependencies": {
+    "rc": "0",
+    "co": "3",
+    "co-fs": "1",
+    "mkdirp": "0",
+    "commander": "2",
+    "normalize-agent": "*",
+    "normalize-builder": "*",
+    "normalize-require": "1",
+    "normalize-walker": "*"
+  },
+  "bin": {
+    "nlz": "bin/nlz",
+    "nlz-build": "bin/nlz-build"
+  },
+  "engines": {
+    "node": ">= 0.11.12"
+  }
 }

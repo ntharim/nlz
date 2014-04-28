@@ -1,0 +1,58 @@
+#!/usr/bin/env node
+
+var program = require('commander')
+
+program
+  .version(require('../package.json').version)
+  .usage('[options] entrypoints...')
+  .option('-o, --out <dir>', 'output directory')
+  .parse(process.argv)
+
+var flatten = require('normalize-walker').flatten
+var builder = require('normalize-builder')
+var rjs = require('normalize-require')
+var path = require('path')
+var fs = require('co-fs')
+var co = require('co')
+
+var options = require('../lib/options')(program)
+var out = options.out
+require('mkdirp').sync(out)
+
+var walker = builder.walker(options)
+var entrypoints = program.args.map(function (entrypoint) {
+  return path.resolve(entrypoint)
+})
+if (!entrypoints.length) {
+  console.error('error: no entrypoints specified!')
+  process.exit(1)
+}
+entrypoints.forEach(function (entrypoint) {
+  switch (path.extname(entrypoint)) {
+  case '.js':
+  case '.css':
+    return walker.add(entrypoint)
+  }
+  console.error('error: entrypoint ' + path.basename(entrypoint) + ' is not supported. try only .js and .css files.')
+})
+
+co(function* () {
+  var tree = yield* walker.tree()
+
+  yield entrypoints.map(function (filename) {
+    return function* () {
+      switch (path.extname(filename)) {
+      case '.js':
+        var files = flatten(tree[filename], 'js')
+        var js = rjs + '\n' + builder.js(files)
+        yield fs.writeFile(path.resolve(out, path.basename(filename)), js)
+        return
+      case '.css':
+        var files = flatten(tree[filename], 'css')
+        var css = builder.css(files)
+        yield fs.writeFile(path.resolve(out, path.basename(filename)), css)
+        return
+      }
+    }
+  })
+})()
