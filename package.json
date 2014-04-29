@@ -13,17 +13,16 @@
   "dependencies": {
     "rc": "0",
     "co": "3",
-    "co-fs": "1",
+    "bytes": "0",
+    "gnode": "0",
     "mkdirp": "0",
     "commander": "2",
     "normalize-agent": "*",
-    "normalize-builder": "*",
-    "normalize-require": "1",
-    "normalize-walker": "*"
+    "normalize-build": "*"
   },
   "bin": {
     "nlz": "bin/nlz",
-    "nlz-build": "bin/nlz-build"
+    "-nlz-build": "bin/-nlz-build"
   },
   "engines": {
     "node": ">= 0.11.12"
