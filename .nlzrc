@@ -1,4 +1,7 @@
 {
   "proxy": "localhost:8888",
-  "rejectUnauthorized": "false"
+  "entrypoints": [
+    "test/index.js",
+    "test/index.css"
+  ]
 }

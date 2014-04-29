@@ -4,7 +4,7 @@ var program = require('commander')
 program._name = 'nlz build'
 program
   .version(require('../package.json').version)
-  .usage('[options] entrypoints...')
+  .usage('[options] [entrypoints...]')
   .option('-w, --watch', 'watch for file changes and rebuild automatically')
   .option('-o, --out <dir>', 'output directory')
   .parse(process.argv)
@@ -15,26 +15,34 @@ var path = require('path')
 var fs = require('fs')
 var co = require('co')
 
-var options = require('../lib/options')(program)
-var out = options.out
+var Options = require('../lib/options')
+
+// parse options
+var options = Options()
+// overwrite .rc file's entrypoints
+if (program.args.length) options.entrypoints = Options.entrypoints(program.args)
+
+// output folder
+var out = path.resolve(program.out || options.out)
 require('mkdirp').sync(out)
 
+// need entry points, duh
+var entrypoints = options.entrypoints
+if (!entrypoints || !Object.keys(entrypoints).length) {
+  console.error('error: no entrypoints specified!')
+  process.exit(1)
+}
+
+// setup the builder
 var builder = Build(options)
 builder.on('tree', function (_, ms) {
   console.log('tree: resolved in ' + ms + 'ms')
 })
 
-var entrypoints = program.args.map(function (entrypoint) {
-  return path.resolve(entrypoint)
-})
-
-if (!entrypoints.length) {
-  console.error('error: no entrypoints specified!')
-  process.exit(1)
-}
-
-entrypoints.forEach(function (entrypoint) {
+// setup the entrypoints
+Object.keys(entrypoints).forEach(function (entrypoint) {
   var name = path.basename(entrypoint)
+  var opts = entrypoints[entrypoint]
 
   switch (path.extname(name)) {
   case '.js':
@@ -45,11 +53,11 @@ entrypoints.forEach(function (entrypoint) {
     return
   }
 
-  builder.add(entrypoint)
-  builder.on(entrypoint, function (res) {
-    fs.writeFile(path.resolve(out, name), res, function (err) {
+  builder.add(entrypoint, opts)
+  builder.on(entrypoint, function (string) {
+    fs.writeFile(path.resolve(out, name), string, function (err) {
       if (err) throw err
-      console.log('built: ' + name + ' (' + bytes(Buffer.byteLength(res)) + ')')
+      console.log('built: ' + name + ' - ' + byteSize(string))
     })
   })
 })
@@ -64,6 +72,8 @@ if (!options.watch) {
 
 builder.watch()
 
-co(function* () {
-  yield* builder.build()
-})()
+co(builder.build())()
+
+function byteSize(string) {
+  return bytes(Buffer.byteLength(string))
+}
