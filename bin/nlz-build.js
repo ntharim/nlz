@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 
 var program = require('commander')
 
@@ -21,6 +20,10 @@ var out = options.out
 require('mkdirp').sync(out)
 
 var builder = Build(options)
+builder.on('tree', function (_, ms) {
+  console.log('tree: resolved in ' + ms + 'ms')
+})
+
 var entrypoints = program.args.map(function (entrypoint) {
   return path.resolve(entrypoint)
 })

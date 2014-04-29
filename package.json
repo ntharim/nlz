@@ -21,8 +21,7 @@
     "normalize-build": "*"
   },
   "bin": {
-    "nlz": "bin/nlz",
-    "-nlz-build": "bin/-nlz-build"
+    "nlz": "bin/nlz"
   },
   "engines": {
     "node": ">= 0.11.12"

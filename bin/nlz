@@ -30,7 +30,7 @@ var stat = fs.statSync
 var exists = fs.existsSync
 var resolve = path.resolve
 
-var bin = '-nlz-' + args.shift()
+var bin = 'nlz-' + args.shift() + '.js'
 
 var local = join(__dirname, bin);
 
@@ -48,7 +48,9 @@ if (!exists(bin)) {
   process.exit(1)
 }
 
-var proc = spawn(gnode, [bin].concat(args), { stdio: 'inherit', customFds: [0, 1, 2] })
+var proc = spawn(gnode,
+  ['--harmony-generators', bin].concat(args),
+  { stdio: 'inherit', customFds: [0, 1, 2] })
 
 proc.on('close', function(code){
   process.exit(code)
