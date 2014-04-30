@@ -18,7 +18,8 @@
     "mkdirp": "0",
     "commander": "2",
     "normalize-agent": "*",
-    "normalize-build": "*"
+    "normalize-build": "*",
+    "normalize-transforms": "*"
   },
   "bin": {
     "nlz": "bin/nlz"
