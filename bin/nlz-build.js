@@ -35,7 +35,8 @@ if (!entrypoints || !Object.keys(entrypoints).length) {
 
 // setup the builder
 var builder = Build(options)
-builder.on('tree', function (_, ms) {
+builder.on('tree', function (tree, ms) {
+  if (!tree) return
   console.log('tree: resolved in ' + ms + 'ms')
 })
 
