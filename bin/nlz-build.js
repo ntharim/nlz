@@ -3,11 +3,11 @@ var program = require('commander')
 
 program._name = 'nlz build'
 program
-  .version(require('../package.json').version)
   .usage('[options] [entrypoints...]')
   .option('-w, --watch', 'watch for file changes and rebuild automatically')
   .option('-o, --out <dir>', 'output directory')
-  .parse(process.argv)
+
+program.parse(process.argv)
 
 var Build = require('normalize-build')
 var bytes = require('bytes')
@@ -66,6 +66,7 @@ Object.keys(entrypoints).forEach(function (entrypoint) {
 if (!options.watch) {
   co(function* () {
     yield* builder.build()
+    yield builder.await('manifest')
     options.agent.close()
   })()
   return
