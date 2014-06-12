@@ -16,6 +16,7 @@ var fs = require('fs')
 var co = require('co')
 
 var Options = require('../lib/options')
+var log = require('../lib/log')
 
 // parse options
 var options = Options()
@@ -29,7 +30,7 @@ require('mkdirp').sync(out)
 // need entry points, duh
 var entrypoints = options.entrypoints
 if (!entrypoints || !Object.keys(entrypoints).length) {
-  console.error('error: no entrypoints specified!')
+  log.error('no entry points specified!')
   process.exit(1)
 }
 
@@ -37,7 +38,7 @@ if (!entrypoints || !Object.keys(entrypoints).length) {
 var builder = Build(options)
 builder.on('tree', function (tree, ms) {
   if (!tree) return
-  console.log('tree: resolved in ' + ms + 'ms')
+  log.info('tree'.grey, 'resolved in ' + (ms + 'ms').yellow)
 })
 
 // setup the entrypoints
@@ -50,7 +51,7 @@ Object.keys(entrypoints).forEach(function (entrypoint) {
   case '.css':
     break
   default:
-    console.error('error: entrypoint ' + name + ' is not supported. try only .js and .css files.')
+    log.error('entrypoint ' + name.red + ' is not supported. try only .js and .css files.')
     return
   }
 
@@ -58,7 +59,7 @@ Object.keys(entrypoints).forEach(function (entrypoint) {
   builder.on(entrypoint, function (string) {
     fs.writeFile(path.resolve(out, name), string, function (err) {
       if (err) throw err
-      console.log('built: ' + name + ' - ' + byteSize(string))
+      log.info('built'.grey, name.blue + ' ' + byteSize(string).yellow)
     })
   })
 })

@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 var program = require('commander')
+require('colors')
 
 program
   .version(require('../package.json').version)
@@ -9,22 +10,34 @@ program
 program.on('--help', function() {
   console.log('  Commands:')
   console.log()
-  console.log('    build               build the entry points')
-  // console.log('    walk                walk the dependency tree without building')
-  // console.log()
-  // console.log('    link                symlink the current package')
-  // console.log('    search              search the proxy for packages')
+  console.log('    Primary Commands:'.blue)
   console.log()
-  console.log('    dependencies        list all dependencies')
-  // console.log('    dependents          list all dependents')
-  // console.log('    duplicates          list all duplicate dependencies')
-  // console.log('    tree                list all dependencies as a nested tree')
-  // console.log()
-  // console.log('    outdated            list all outdated dependencies')
-  // console.log('    update              update all outdated dependencies in the shrinkwrap')
-  // console.log('    shrinkwrap          pin all semver-ranged deps in a file')
+  command('build', 'build the entry points')
+  command('walk', 'walk the dependency tree and build the manifest')
+  console.log()
+  command('link', 'symlink this or another package')
+  command('search', 'search the proxy for packages')
+  console.log()
+  console.log('    Dependency Inspection:'.blue)
+  console.log()
+  command('dependencies', 'list all dependencies')
+  command('dependents', 'list all dependents')
+  command('duplicates', 'list all duplicates')
+  command('tree', 'list all dependencies as a nested tree')
+  console.log()
+  console.log('    Version Management:'.blue)
+  console.log()
+  command('outdated', 'list all outdated dependencies')
+  command('update', 'update all outdated dependencies in the shrinkwrap')
+  command('shrinkwrap', 'pin all semver-ranged deps into a shrinkwrap')
   console.log()
   process.exit()
+
+  function command(name, description) {
+    name = '      ' + name
+    while (name.length < 22) name += ' '
+    console.log(name + description.grey)
+  }
 })
 
 program.parse(process.argv)

@@ -16,7 +16,9 @@
     "bytes": "0",
     "gnode": "0",
     "mkdirp": "0",
+    "colors": "0",
     "commander": "2",
+
     "normalize-agent": "0",
     "normalize-build": "0",
     "normalize-transforms": "0"
