@@ -1,7 +1,7 @@
 {
   "name": "nlz",
   "description": "Normalize CLI utility",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": {
     "name": "Jonathan Ong",
     "email": "me@jongleberry.com",
@@ -18,7 +18,6 @@
     "mkdirp": "0",
     "colors": "0",
     "commander": "2",
-
     "normalize-agent": "0",
     "normalize-build": "0",
     "normalize-transforms": "0"
