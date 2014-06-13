@@ -42,13 +42,14 @@ program.on('--help', function() {
 
 program.parse(process.argv)
 
+var log = require('../lib/log')
+
 var args = process.argv.slice(2)
 if (!args.length) {
-  console.error('error: no command specified. type `nlz --help` for options.')
+  log.error('no command specified. type `nlz --help` for options.')
   process.exit(1)
 }
 
-var gnode = require.resolve('gnode/bin/gnode')
 var spawn = require('child_process').spawn
 var path = require('path')
 var fs = require('fs')
@@ -71,11 +72,18 @@ if (exists(local)) {
 }
 
 if (!exists(bin)) {
-  console.error('%s(1) does not exist', bin)
+  log.error(bin + '(1) does not exist!')
   process.exit(1)
 }
 
-var proc = spawn(gnode,
+var version = process.version.split('.')
+var major = version[0].replace('v', '')
+var minor = version[1]
+var gnode = major < 1 && minor < 11
+
+var proc = spawn(gnode
+    ? require.resolve('gnode/bin/gnode')
+    : 'node',
   ['--harmony-generators', bin].concat(args),
   { stdio: 'inherit', customFds: [0, 1, 2] })
 
