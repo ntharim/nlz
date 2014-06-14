@@ -13,7 +13,7 @@ program.on('--help', function() {
   console.log(chalk.magenta('    Primary Commands:'))
   console.log()
   command('build', 'build the entry points')
-  command('walk', 'walk the dependency tree and build the manifest')
+  command('manifest', 'build only the manifest')
   console.log()
   command('link', 'symlink this or another package')
   command('search', 'search the proxy for packages')

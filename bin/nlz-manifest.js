@@ -5,7 +5,7 @@
 
 var program = require('commander')
 
-program._name = 'nlz walk'
+program._name = 'nlz manifest'
 program
   .usage('[options] [entrypoints...]')
 
