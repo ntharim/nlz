@@ -28,7 +28,7 @@ if (!entrypoint) {
 var bytes = require('bytes')
 var fs = require('fs')
 
-var filename = require('../lib/options')().manifest
+var filename = require('normalize-rc')().manifest
 if (!fs.existsSync(filename)) {
   console.error('error: no normalize-manifest.json found.')
   console.error('error: please run `nlz build` first.')

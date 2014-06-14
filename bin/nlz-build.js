@@ -10,12 +10,12 @@ program
 program.parse(process.argv)
 
 var Build = require('normalize-build')
+var Options = require('normalize-rc')
 var bytes = require('bytes')
 var path = require('path')
 var fs = require('fs')
 var co = require('co')
 
-var Options = require('../lib/options')
 var log = require('../lib/log')
 
 // parse options

@@ -11,21 +11,16 @@
   "license": "MIT",
   "repository": "normalize/nlz",
   "dependencies": {
-    "rc": "0",
     "co": "3",
     "bytes": "0",
     "gnode": "0",
     "mkdirp": "0",
     "colors": "0",
     "commander": "2",
-    "normalize-agent": "0",
     "normalize-build": "0",
-    "normalize-transforms": "0"
+    "normalize-options": "0"
   },
   "bin": {
     "nlz": "bin/nlz"
-  },
-  "engines": {
-    "node": ">= 0.11.12"
   }
 }
