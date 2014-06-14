@@ -12,13 +12,14 @@
   "repository": "normalize/nlz",
   "dependencies": {
     "co": "3",
+    "chalk": "0",
     "bytes": "0",
     "gnode": "0",
     "mkdirp": "0",
     "commander": "2",
+    "normalize-rc": "0",
     "normalize-log": "0",
-    "normalize-build": "0",
-    "normalize-options": "0"
+    "normalize-build": "0"
   },
   "bin": {
     "nlz": "bin/nlz"

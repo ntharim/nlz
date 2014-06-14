@@ -13,6 +13,7 @@ var Build = require('normalize-build')
 var Options = require('normalize-rc')
 var log = require('normalize-log')
 var bytes = require('bytes')
+var chalk = require('chalk')
 var path = require('path')
 var fs = require('fs')
 var co = require('co')
@@ -37,7 +38,7 @@ if (!entrypoints || !Object.keys(entrypoints).length) {
 var builder = Build(options)
 builder.on('tree', function (tree, ms) {
   if (!tree) return
-  log.info('tree'.grey, 'resolved in ' + (ms + 'ms').yellow)
+  log.info(chalk.grey('tree'), 'resolved in ' + chalk.yellow(ms + 'ms'))
 })
 
 // setup the entrypoints
@@ -50,7 +51,7 @@ Object.keys(entrypoints).forEach(function (entrypoint) {
   case '.css':
     break
   default:
-    log.error('entrypoint ' + name.red + ' is not supported. try only .js and .css files.')
+    log.error('entrypoint ' + chalk.red(name) + ' is not supported. try only .js and .css files.')
     return
   }
 
@@ -58,7 +59,7 @@ Object.keys(entrypoints).forEach(function (entrypoint) {
   builder.on(entrypoint, function (string) {
     fs.writeFile(path.resolve(out, name), string, function (err) {
       if (err) throw err
-      log.info('built'.grey, name.blue + ' ' + byteSize(string).yellow)
+      log.info(chalk.grey('built'), chalk.blue(name) + ' ' + chalk.yellow(byteSize(string)))
     })
   })
 })
