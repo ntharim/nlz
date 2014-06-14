@@ -23,7 +23,6 @@ program.on('--help', function() {
   command('dependencies', 'list all dependencies')
   // command('dependents', 'list all dependents')
   // command('duplicates', 'list all duplicates')
-  // command('tree', 'list all dependencies as a nested tree')
   command('size', 'list the sizes of a file and its dependencies')
   console.log()
   // console.log(chalk.magenta('    Version Management:'))
