@@ -3,7 +3,7 @@ var program = require('commander')
 
 program._name = 'nlz duplicates'
 program
-  .usage('[options] [entrypoint]')
+  .usage('[options] <entrypoint>')
 
 program.on('--help', function () {
   console.log('  List all duplicate dependencies.')

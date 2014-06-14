@@ -3,7 +3,7 @@ var program = require('commander')
 
 program._name = 'nlz dependents'
 program
-  .usage('[options] [entrypoint]')
+  .usage('[options] <entrypoint>')
   .option('-r, --remotes', 'include dependencies of remotes')
   .option('-c, --coalesce', 'coalesce remote files to the project')
 

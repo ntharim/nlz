@@ -3,7 +3,7 @@ var program = require('commander')
 
 program._name = 'nlz dependencies'
 program
-  .usage('[options] [entrypoint]')
+  .usage('[options] <entrypoint>')
   .option('-r, --remotes', 'include dependencies of remotes')
 
 program.on('--help', function () {
@@ -24,7 +24,6 @@ program.on('--help', function () {
 program.parse(process.argv)
 
 var log = require('normalize-log')
-var chalk = require('chalk')
 
 var entrypoint = program.args[0]
 if (!entrypoint) {
@@ -32,22 +31,15 @@ if (!entrypoint) {
   process.exit(1)
 }
 
-var bytes = require('bytes')
 var path = require('path')
-var fs = require('fs')
+var chalk = require('chalk')
+var options = require('normalize-rc')()
+var manifest = require('./_manifest')(options)
 
-var filename = require('normalize-rc')().manifest
-if (!fs.existsSync(filename)) {
-  log.error('no ' + chalk.grey('normalize-manifest.json') + ' found.')
-  log.error('please run ' + chalk.red('nlz build') + ' first.')
-  process.exit(1)
-}
-
-var manifest = require(filename)
 var logged = []
 var queue = []
 
-// resolve the entry point as a canonical
+// resolve the entry point
 entrypoint = path.resolve(entrypoint)
 entrypoint = './' + path.relative(process.cwd(), entrypoint)
 var file = manifest[entrypoint]
@@ -74,37 +66,17 @@ function logFile(file) {
   // don't log remote files
   if (file.remote && !program.remotes) return
 
-  console.log('  ' + stringify(file))
-
   var deps = file.dependencies
   var names = Object.keys(deps)
+  if (!names.length) return
+
+  console.log('  ' + file.name + ' - ' + file.size)
   names.forEach(function (name, i) {
     var dep = manifest[deps[name]]
     if (!~logged.indexOf(dep) && !~queue.indexOf(dep)) queue.push(dep)
     var anchor = i === names.length - 1
       ? '└─'
       : '├─'
-    console.log('   ' + anchor + ' ' + stringify(dep))
+    console.log('   ' + anchor + ' ' + dep.name + ' - ' + dep.size)
   })
-}
-
-function stringify(file) {
-  if (file.remote) {
-    return chalk.grey(file.remote === 'npm' || file.remote === 'github'
-        ? ''
-        : (file.remote + ':'))
-      + chalk.grey(file.user && file.user !== '-'
-        ? (file.user + '/')
-        : '')
-      + chalk.grey(file.project)
-      + chalk.green('@' + file.version)
-      + chalk.cyan('/' + file.filename)
-      + lengthOf(file)
-  } else {
-    return chalk.cyan(file.uri) + lengthOf(file)
-  }
-}
-
-function lengthOf(file) {
-  return ' - ' + chalk.yellow(bytes(file.minifiedLength || file.length))
 }

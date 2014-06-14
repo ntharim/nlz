@@ -16,7 +16,10 @@
     "bytes": "0",
     "gnode": "0",
     "mkdirp": "0",
+    "cli-table": "0",
     "commander": "2",
+    "humanize-number": "0",
+
     "normalize-rc": "0",
     "normalize-log": "0",
     "normalize-build": "0"
