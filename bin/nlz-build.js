@@ -40,6 +40,8 @@ Object.keys(entrypoints).forEach(function (entrypoint) {
 })
 
 if (options.watch) {
+  // automatically minify the file sizes in the manifest
+  options.minifiedLength = true
   builder.watch()
   co(builder.build())()
 } else {

@@ -26,7 +26,7 @@ program.parse(process.argv)
 var log = require('normalize-log')
 var chalk = require('chalk')
 
-var entrypoint = process.argv[2]
+var entrypoint = program.args[0]
 if (!entrypoint) {
   log.error('no entry point provided!')
   process.exit(1)
@@ -50,9 +50,6 @@ var queue = []
 // resolve the entry point as a canonical
 entrypoint = path.resolve(entrypoint)
 entrypoint = './' + path.relative(process.cwd(), entrypoint)
-entrypoint = entrypoint
-  .replace(/\/index\.js$/, '/')
-  .replace(/\.js$/, '')
 var file = manifest[entrypoint]
 if (!file) {
   console.error('entry point ' + chalk.red(entrypoint) + ' was not found in the manifest.')
@@ -72,6 +69,7 @@ function logFile(file) {
 
   // already logged
   if (~logged.indexOf(file)) return
+  logged.push(file)
 
   // don't log remote files
   if (file.remote && !program.remotes) return
