@@ -16,6 +16,7 @@
     "bytes": "0",
     "gnode": "0",
     "mkdirp": "0",
+    "semver": "2",
     "cli-table": "0",
     "commander": "2",
     "humanize-number": "0",

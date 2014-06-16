@@ -15,11 +15,24 @@ module.exports = function (options) {
     process.exit(1)
   }
 
+  // add logged version of properties
   var manifest = require(filename)
-  Object.keys(manifest).forEach(function (uri) {
-    var file = manifest[uri]
+  var files = Object.keys(manifest).map(function (uri) {
+    return manifest[uri]
+  })
+
+  files.forEach(function (file) {
     file.name = stringify(file)
     file.size = lengthOf(file)
+  })
+
+  // add dependents
+  files.forEach(function (file) {
+    Object.keys(file.dependencies).forEach(function (uri) {
+      var dep = manifest[file.dependencies[uri]]
+      dep.dependents = dep.dependents || []
+      dep.dependents.push(file)
+    })
   })
 
   return manifest

@@ -4,11 +4,9 @@ var program = require('commander')
 program._name = 'nlz dependents'
 program
   .usage('[options] <entrypoint>')
-  .option('-r, --remotes', 'include dependencies of remotes')
-  .option('-c, --coalesce', 'coalesce remote files to the project')
 
 program.on('--help', function () {
-  console.log('  List all the dependents of the entry point as a flat list.')
+  console.log('  List all the dependents of the entry point.')
   console.log('  Example:')
   console.log()
   console.log('    # list the dependents of index.js')

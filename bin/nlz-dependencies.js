@@ -7,7 +7,7 @@ program
   .option('-r, --remotes', 'include dependencies of remotes')
 
 program.on('--help', function () {
-  console.log('  List all the dependencies of the entry point as a flat list.')
+  console.log('  List all the dependencies of the entry point.')
   console.log('  Example:')
   console.log()
   console.log('    # list the dependencies of index.js')
