@@ -3,7 +3,7 @@ var program = require('commander')
 
 program._name = 'nlz duplicates'
 program
-  .usage('[options] <entrypoint>')
+  .usage('[options]')
 
 program.on('--help', function () {
   console.log('  List all duplicate dependencies.')
@@ -20,19 +20,11 @@ program.on('--help', function () {
 
 program.parse(process.argv)
 
-var log = require('normalize-log')
-
-var entrypoint = program.args[0]
-if (!entrypoint) {
-  log.error('no entry point provided!')
-  process.exit(1)
-}
-
 var bytes = require('bytes')
 var chalk = require('chalk')
 var semver = require('semver')
 var options = require('normalize-rc')()
-var manifest = require('./_manifest')(options)
+var manifest = require('../lib/manifest')(options)
 
 // all the files
 var files = Object.keys(manifest).map(function (name) {
@@ -74,12 +66,18 @@ Object.keys(dependencies).map(function (name) {
       ? (dep.user + '/')
       : '')
     + chalk.grey(dep.project)
-  var versions = Object.keys(dep.versions)
+
+  var versions = Object.keys(dep.versions).sort(function (a, b) {
+    var avalid = semver.valid(a)
+    var bvalid = semver.valid(b)
+    if (avalid && bvalid) return semver.rcompare(a, b)
+    if (!avalid && !bvalid) return 0
+    if (avalid) return -1
+    return 1
+  })
 
   // get the largest version
-  var latest = versions.filter(function (version) {
-    return semver.valid(version)
-  }).sort(semver.rcompare)[0]
+  var latest = versions[0]
 
   // calculate the total size saved if removing everything
   // but the latest version
@@ -97,11 +95,11 @@ Object.keys(dependencies).map(function (name) {
      + ': '
      + chalk.red(bytes(diff)))
 
-  var versions = Object.keys(dep.versions)
   versions.forEach(function (version, index) {
     var last = versions.length === index + 1
     var symbol = last ? '└' : '├'
-    console.log('   ' + symbol + ' ' + version)
+    console.log('   ' + symbol + ' ' + version
+      + (index === 0 ? ' (latest)' : ''))
 
     var files = dep.versions[version]
     files.forEach(function (file, index) {

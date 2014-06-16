@@ -25,7 +25,7 @@ var out = path.resolve(program.out || options.out)
 require('mkdirp').sync(out)
 
 // builder instance
-var builder = require('./_build')(program, options)
+var builder = require('../lib/build')(program, options)
 var entrypoints = options.entrypoints
 
 // setup the entrypoints

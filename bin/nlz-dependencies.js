@@ -23,30 +23,13 @@ program.on('--help', function () {
 
 program.parse(process.argv)
 
-var log = require('normalize-log')
-
-var entrypoint = program.args[0]
-if (!entrypoint) {
-  log.error('no entry point provided!')
-  process.exit(1)
-}
-
-var path = require('path')
-var chalk = require('chalk')
 var options = require('normalize-rc')()
-var manifest = require('./_manifest')(options)
+var manifest = require('../lib/manifest')(options)
+var file = require('../lib/entrypoint')(manifest, program)
 
 var logged = []
 var queue = []
 
-// resolve the entry point
-entrypoint = path.resolve(entrypoint)
-entrypoint = './' + path.relative(process.cwd(), entrypoint)
-var file = manifest[entrypoint]
-if (!file) {
-  console.error('entry point ' + chalk.red(entrypoint) + ' was not found in the manifest.')
-  process.exit(1)
-}
 
 console.log()
 logFile(file)
@@ -57,7 +40,7 @@ console.log()
 function logFile(file) {
   // remove from queue
   var index = queue.indexOf(file)
-  if (!index) queue.splice(index, 1)
+  if (~index) queue.splice(index, 1)
 
   // already logged
   if (~logged.indexOf(file)) return

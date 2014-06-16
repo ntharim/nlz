@@ -9,30 +9,14 @@ program
 
 program.parse(process.argv)
 
-var log = require('normalize-log')
-
-var entrypoint = program.args[0]
-if (!entrypoint) {
-  log.error('no entry point provided!')
-  process.exit(1)
-}
-
 var path = require('path')
 var bytes = require('bytes')
 var chalk = require('chalk')
 var Table = require('cli-table')
 var options = require('normalize-rc')()
 var humanize = require('humanize-number')
-var manifest = require('./_manifest')(options)
-
-// resolve the entry point
-entrypoint = path.resolve(entrypoint)
-entrypoint = './' + path.relative(process.cwd(), entrypoint)
-var file = manifest[entrypoint]
-if (!file) {
-  console.error('entry point ' + chalk.red(entrypoint) + ' was not found in the manifest.')
-  process.exit(1)
-}
+var manifest = require('../lib/manifest')(options)
+var file = require('../lib/entrypoint')(manifest, program)
 
 // list all of the file's dependencies
 var files = []
@@ -90,7 +74,7 @@ console.log()
 console.log('   Entry Point: ' + file.name)
 console.log('    Total Size: ' + chalk.red(bytes(total)))
 console.log('  Dependencies: ' + chalk.grey(humanize(count)))
-console.log('     Threshold: ' + chalk.grey(bytes(min || 0)))
+console.log('     Threshold: ' + chalk.grey('>= ' + bytes(min || 0)))
 console.log('    Extensions: ' + chalk.grey(exts ? exts.join(', ') : '*'))
 
 console.log()
