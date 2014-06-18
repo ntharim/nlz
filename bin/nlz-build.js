@@ -6,6 +6,7 @@ program
   .usage('[options] [entrypoints...] [-]')
   .option('-w, --watch', 'watch for file changes and rebuild automatically')
   .option('-o, --out <dir>', 'output directory for all builds')
+  .option('-s, --standalone <name>', 'build as a standalone UMD module')
 
 program.on('--help', function () {
   console.log('  To print to stdout, set `-` as an argument.')
@@ -52,6 +53,21 @@ if (~stdindex) {
 // builder instance
 var builder = require('../lib/build')(program, options)
 var entrypoints = options.entrypoints
+
+if (options.standalone) {
+  Object.keys(entrypoints).filter(function (entrypoint) {
+    return /\.js$/.exec(entrypoint)
+  }).forEach(function (entrypoint, i) {
+    if (i > 0) {
+      console.error()
+      log.error('you may not specify more than one .js entry point when using `--standalone`.')
+      console.error()
+      process.exit(1)
+    }
+
+    builder.options[entrypoint].umd = program.standalone
+  })
+}
 
 if (options.stdout) {
   // stdout
