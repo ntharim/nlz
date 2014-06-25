@@ -17,7 +17,7 @@ var co = require('co')
 
 var options = Options()
 options.minifiedLength = program.min
-var builder = require('../lib/build')(program, options)
+var builder = require('../lib/builder')(program, options)
 
 co(function* () {
   yield* builder.build()
