@@ -20,9 +20,11 @@
     "cli-table": "0",
     "commander": "2",
     "humanize-number": "0",
+
     "normalize-rc": "0",
     "normalize-log": "0",
-    "normalize-build": "0"
+    "normalize-build": "0",
+    "normalize-graph": "0"
   },
   "bin": {
     "nlz": "bin/nlz"
